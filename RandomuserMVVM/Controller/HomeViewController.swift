@@ -16,7 +16,7 @@ class HomeViewController: UIViewController {
         collectionView.delegate = self
         
         collectionView.register(UserCell.self, forCellWithReuseIdentifier: UserCell.identifier)
-      
+        
         return collectionView
     }()
     
@@ -62,22 +62,26 @@ class HomeViewController: UIViewController {
     }
     
     var data: [Results] = []
-
+    
     func getUserData() {
-        NetworkManager.shared.getRequest { [weak self] (res) in
-            switch res {
-            case .success(let userResult):
-                
-                self?.data = userResult.results ?? []
-                
-                DispatchQueue.main.async {
-                    self?.collectionView.reloadData()
+        Spinner.start()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            NetworkManager.shared.getRequest { [weak self] (res) in
+                switch res {
+                case .success(let userResult):
+                    
+                    self?.data = userResult.results ?? []
+                    
+                    DispatchQueue.main.async {
+                        self?.collectionView.reloadData()
+                    }
+                    Spinner.stop()
+                case.failure(let error):
+                    print("Bad", error)
                 }
-                
-            case.failure(let error):
-                print("Bad", error)
             }
         }
+        
     }
 }
 
