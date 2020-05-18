@@ -19,6 +19,8 @@
 		6E485FA0247126BE00AF182B /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E485F9F247126BE00AF182B /* NetworkManager.swift */; };
 		6E485FA224712BE200AF182B /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E485FA124712BE200AF182B /* UIView+Layout.swift */; };
 		6E485FA42471390B00AF182B /* LodingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E485FA32471390B00AF182B /* LodingHeader.swift */; };
+		6E6AB3A82472769C00AD81D6 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6AB3A72472769C00AD81D6 /* BaseTableViewController.swift */; };
+		6E6AB3AA2472784C00AD81D6 /* BaseCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6AB3A92472784C00AD81D6 /* BaseCollectionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		6E485F9F247126BE00AF182B /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		6E485FA124712BE200AF182B /* UIView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
 		6E485FA32471390B00AF182B /* LodingHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LodingHeader.swift; sourceTree = "<group>"; };
+		6E6AB3A72472769C00AD81D6 /* BaseTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
+		6E6AB3A92472784C00AD81D6 /* BaseCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +109,8 @@
 			isa = PBXGroup;
 			children = (
 				6E485F9A24711B0800AF182B /* HomeViewController.swift */,
+				6E6AB3A72472769C00AD81D6 /* BaseTableViewController.swift */,
+				6E6AB3A92472784C00AD81D6 /* BaseCollectionViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -190,11 +196,13 @@
 			files = (
 				6E485FA42471390B00AF182B /* LodingHeader.swift in Sources */,
 				6E485FA224712BE200AF182B /* UIView+Layout.swift in Sources */,
+				6E6AB3A82472769C00AD81D6 /* BaseTableViewController.swift in Sources */,
 				6E485F9B24711B0800AF182B /* HomeViewController.swift in Sources */,
 				6E485F85247119F800AF182B /* ViewController.swift in Sources */,
 				6E485F9D24711CFA00AF182B /* UserCell.swift in Sources */,
 				6E485FA0247126BE00AF182B /* NetworkManager.swift in Sources */,
 				6E485F81247119F800AF182B /* AppDelegate.swift in Sources */,
+				6E6AB3AA2472784C00AD81D6 /* BaseCollectionViewController.swift in Sources */,
 				6E485F9624711AAC00AF182B /* RandomModel.swift in Sources */,
 				6E485F83247119F800AF182B /* SceneDelegate.swift in Sources */,
 			);

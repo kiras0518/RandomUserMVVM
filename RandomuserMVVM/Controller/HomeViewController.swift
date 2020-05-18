@@ -8,17 +8,17 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: BaseCollectionViewController {
     
-    lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        
-        collectionView.register(UserCell.self, forCellWithReuseIdentifier: UserCell.identifier)
-        
-        return collectionView
-    }()
+    //    lazy var collectionView: UICollectionView = {
+    //        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UICollectionViewFlowLayout())
+    //        collectionView.dataSource = self
+    //        collectionView.delegate = self
+    //
+    //        collectionView.register(UserCell.self, forCellWithReuseIdentifier: UserCell.identifier)
+    //
+    //        return collectionView
+    //    }()
     
     lazy var refreshControl:UIRefreshControl = {
         let rc = UIRefreshControl()
@@ -43,12 +43,16 @@ class HomeViewController: UIViewController {
                 }
             }
             // 滾動到最下方最新的 Data
-            //self.collectionView.scrollToItem(at: [0, self.data.count - 1], at: .bottom, animated: true)
+            self.collectionView.scrollToItem(at: [0, self.data.count -1], at: .bottom, animated: true)
         }
         
     }
-    
+
     func setupViews() {
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(UserCell.self, forCellWithReuseIdentifier: UserCell.identifier)
+        
         collectionView.backgroundColor = .systemBlue
         collectionView.addSubview(refreshControl)
         view.addSubview(collectionView)
@@ -56,7 +60,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+      
         setupViews()
         getUserData()
     }
@@ -83,15 +87,16 @@ class HomeViewController: UIViewController {
         }
         
     }
+    
 }
 
-extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension HomeViewController {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return data.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserCell.identifier, for: indexPath) as? UserCell else { fatalError("UserCell Fail") }
         
@@ -106,6 +111,11 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         print("indexPath.row", indexPath.row)
         
         return cell
+        
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(indexPath.row)
         
     }
 }
