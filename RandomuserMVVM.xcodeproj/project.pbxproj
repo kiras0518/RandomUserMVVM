@@ -21,6 +21,7 @@
 		6E485FA42471390B00AF182B /* LodingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E485FA32471390B00AF182B /* LodingHeader.swift */; };
 		6E6AB3A82472769C00AD81D6 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6AB3A72472769C00AD81D6 /* BaseTableViewController.swift */; };
 		6E6AB3AA2472784C00AD81D6 /* BaseCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6AB3A92472784C00AD81D6 /* BaseCollectionViewController.swift */; };
+		6E6AB3AD2472E08A00AD81D6 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6AB3AC2472E08A00AD81D6 /* BaseViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		6E485FA32471390B00AF182B /* LodingHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LodingHeader.swift; sourceTree = "<group>"; };
 		6E6AB3A72472769C00AD81D6 /* BaseTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
 		6E6AB3A92472784C00AD81D6 /* BaseCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewController.swift; sourceTree = "<group>"; };
+		6E6AB3AC2472E08A00AD81D6 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				6E485F9424711A1100AF182B /* Model */,
+				6E6AB3AB2472DF1800AD81D6 /* ViewModel */,
 				6E485F9724711ACC00AF182B /* View */,
 				6E485F9924711ADA00AF182B /* Controller */,
 				6E485F9E247126AC00AF182B /* Service */,
@@ -121,6 +124,14 @@
 				6E485F9F247126BE00AF182B /* NetworkManager.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		6E6AB3AB2472DF1800AD81D6 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				6E6AB3AC2472E08A00AD81D6 /* BaseViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,6 +210,7 @@
 				6E6AB3A82472769C00AD81D6 /* BaseTableViewController.swift in Sources */,
 				6E485F9B24711B0800AF182B /* HomeViewController.swift in Sources */,
 				6E485F85247119F800AF182B /* ViewController.swift in Sources */,
+				6E6AB3AD2472E08A00AD81D6 /* BaseViewModel.swift in Sources */,
 				6E485F9D24711CFA00AF182B /* UserCell.swift in Sources */,
 				6E485FA0247126BE00AF182B /* NetworkManager.swift in Sources */,
 				6E485F81247119F800AF182B /* AppDelegate.swift in Sources */,

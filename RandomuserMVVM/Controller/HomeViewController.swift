@@ -10,16 +10,6 @@ import UIKit
 
 class HomeViewController: BaseCollectionViewController {
     
-    //    lazy var collectionView: UICollectionView = {
-    //        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UICollectionViewFlowLayout())
-    //        collectionView.dataSource = self
-    //        collectionView.delegate = self
-    //
-    //        collectionView.register(UserCell.self, forCellWithReuseIdentifier: UserCell.identifier)
-    //
-    //        return collectionView
-    //    }()
-    
     lazy var refreshControl:UIRefreshControl = {
         let rc = UIRefreshControl()
         rc.backgroundColor = .red
@@ -43,11 +33,11 @@ class HomeViewController: BaseCollectionViewController {
                 }
             }
             // 滾動到最下方最新的 Data
-            self.collectionView.scrollToItem(at: [0, self.data.count -1], at: .bottom, animated: true)
+            self.collectionView.scrollToItem(at: [0, self.data.count - 1], at: .bottom, animated: true)
         }
         
     }
-
+    
     func setupViews() {
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -58,36 +48,27 @@ class HomeViewController: BaseCollectionViewController {
         view.addSubview(collectionView)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-      
-        setupViews()
-        getUserData()
+    func update(_ model: [Results]) {
+        self.data += model
     }
     
     var data: [Results] = []
+    var viewModel = BaseViewModel()
     
-    func getUserData() {
-        Spinner.start()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            NetworkManager.shared.getRequest { [weak self] (res) in
-                switch res {
-                case .success(let userResult):
-                    
-                    self?.data = userResult.results ?? []
-                    
-                    DispatchQueue.main.async {
-                        self?.collectionView.reloadData()
-                    }
-                    Spinner.stop()
-                case.failure(let error):
-                    print("Bad", error)
-                }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setupViews()
+        
+        viewModel.fetch()
+        
+        viewModel.addObserve { (model) in
+            self.update(model ?? [])
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
             }
         }
-        
     }
-    
 }
 
 extension HomeViewController {
