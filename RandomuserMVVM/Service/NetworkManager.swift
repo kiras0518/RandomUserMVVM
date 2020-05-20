@@ -21,54 +21,67 @@ class NetworkManager {
     
     let baseURL = "https://randomuser.me/api/?results="
     
-    func getRequest(completed: @escaping (Result<Base, VError>) -> Void) {
-        let endpoint = baseURL + "8"
-        print(endpoint)
+    func fetchCount(completion: @escaping (Result<Base?, VError>) -> Void) {
+        let url = baseURL + "4"
+        fetchGenericJSONData(urlString: url, completion: completion)
+    }
+    
+    func getRequest(completion: @escaping (Result<Base?, VError>) -> Void) {
+        let url = baseURL + "8"
+        fetchGenericJSONData(urlString: url, completion: completion)
+    }
+    
+    func fetchGenericJSONData<T: Decodable>(urlString: String, completion: @escaping (Result<T?, VError>) -> Void) {
         
-        guard let url = URL(string: endpoint) else {
-            completed(.failure(.invalidRequest))
-            return
-        }
+        guard let url = URL(string: urlString) else { return }
         
         let task = URLSession.shared.dataTask(with: url) { (data, res, err) in
-            if let error = err {
-                print(error)
-                completed(.failure(.unableToComplete))
-                return
-            }
-            
-            guard let response = res as? HTTPURLResponse, response.statusCode == 200 else {
-                completed(.failure(.unableToComplete))
+            if let err = err {
+                print("Failed to fetch apps:", err)
+                completion(.failure(.unableToComplete))
                 return
             }
             
             guard let data = data else {
-                completed(.failure(.invalidData))
+                completion(.failure(.invalidData))
                 return
             }
             
             do {
-                let decoder = JSONDecoder()
-                let venues = try decoder.decode(Base.self, from: data)
-                //print(venues)
-                completed(.success(venues))
+                let object = try JSONDecoder().decode(T.self, from: data)
+                completion(.success(object))
             } catch {
-                print(error)
-                completed(.failure(.invalidData))
+                completion(.failure(.invalidData))
             }
+            
         }
-        
         task.resume()
     }
     
-    func fetchCount(completion: @escaping (Base?, VError?) -> ()) {
-        getRequest { (res) in
-            switch res {
-            case .success(let result):
-                completion(result, nil)
-            case .failure(let error):
-                completion(nil, error)
-            }
-        }
-    }
+    //    func fetchGenericJSONData<T: Decodable>(urlString: String, completion: @escaping (T?, VError?) -> Void) {
+    //
+    //        guard let url = URL(string: urlString) else { return }
+    //
+    //        let task = URLSession.shared.dataTask(with: url) { (data, res, err) in
+    //            if let err = err {
+    //                print("Failed to fetch apps:", err)
+    //                completion(nil, VError.unableToComplete)
+    //                return
+    //            }
+    //
+    //            guard let data = data else {
+    //                completion(nil, VError.invalidData)
+    //                return
+    //            }
+    //
+    //            do {
+    //                let object = try JSONDecoder().decode(T.self, from: data)
+    //                completion(object, nil)
+    //            } catch {
+    //                completion(nil, VError.invalidData)
+    //            }
+    //
+    //        }
+    //        task.resume()
+    //    }
 }

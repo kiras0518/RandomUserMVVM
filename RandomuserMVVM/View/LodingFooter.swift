@@ -8,12 +8,12 @@
 
 import UIKit
 
-class LodingHeader: UICollectionReusableView {
+class LodingFooter: UICollectionReusableView {
     
-    static let identifier = "LodingHeader"
+    static let identifier = "LodingFooter"
     
     override var reuseIdentifier: String? {
-        return LodingHeader.identifier
+        return LodingFooter.identifier
     }
     
     lazy var activity: UIActivityIndicatorView = {

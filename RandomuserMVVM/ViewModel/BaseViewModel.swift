@@ -35,10 +35,10 @@ class BaseViewModel {
         service.getRequest { (result) in
             switch result {
             case .success(let model):
-                self.model = model.results
+                self.model = model?.results
                 Spinner.stop()
-            case .failure(let error):
-                print(error.localizedDescription)
+            case .failure(let err):
+                print(err.localizedDescription)
             }
         }
     }

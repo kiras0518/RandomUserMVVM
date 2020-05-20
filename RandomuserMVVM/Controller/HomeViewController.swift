@@ -8,9 +8,14 @@
 
 import UIKit
 
+enum PageStuts {
+    case LoadingMore
+    case NotLoadingMore
+}
+
 class HomeViewController: BaseCollectionViewController {
     
-    lazy var refreshControl:UIRefreshControl = {
+    lazy var refreshControl: UIRefreshControl = {
         let rc = UIRefreshControl()
         rc.backgroundColor = .red
         rc.attributedTitle = NSAttributedString(string: "Pull to refresh")
@@ -24,16 +29,25 @@ class HomeViewController: BaseCollectionViewController {
             
             self.refreshControl.endRefreshing()
             
-            NetworkManager.shared.fetchCount { (res, err) in
+            NetworkManager.shared.fetchCount { (result) in
                 
-                self.data += res?.results ?? []
-                
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
+                switch result {
+                case .success(let model):
+                    self.data += model?.results ?? []
+                    
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadData()
+                    }
+                    
+                case .failure(let err):
+                    print(err.localizedDescription)
                 }
             }
+            
             // 滾動到最下方最新的 Data
-            self.collectionView.scrollToItem(at: [0, self.data.count - 1], at: .bottom, animated: true)
+//            self.collectionView.scrollToItem(at: [0, self.data.count - 1],
+//                                             at: .bottom,
+//                                             animated: true)
         }
         
     }
@@ -42,7 +56,7 @@ class HomeViewController: BaseCollectionViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(UserCell.self, forCellWithReuseIdentifier: UserCell.identifier)
-        
+        collectionView.register(LodingFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: LodingFooter.identifier)
         collectionView.backgroundColor = .systemBlue
         collectionView.addSubview(refreshControl)
         view.addSubview(collectionView)
@@ -54,6 +68,9 @@ class HomeViewController: BaseCollectionViewController {
     
     var data: [Results] = []
     var viewModel = BaseViewModel()
+    var pagestatus: PageStuts = .NotLoadingMore
+    
+    var isDonePagination = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,7 +90,20 @@ class HomeViewController: BaseCollectionViewController {
 
 extension HomeViewController {
     
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: LodingFooter.identifier, for: indexPath)
+        
+        return footer
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        
+        let height: CGFloat = isDonePagination ? 0 : 100
+        return .init(width: view.frame.width, height: height)
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print("data.count", data.count)
         return data.count
     }
     
@@ -90,6 +120,47 @@ extension HomeViewController {
         cell.userImage.downloadImage(from: url!)
         
         print("indexPath.row", indexPath.row)
+        
+        if indexPath.row == data.count - 1 {
+            print("fetch more data")
+
+            self.pagestatus = .LoadingMore
+
+            switch pagestatus {
+            case .LoadingMore:
+
+                NetworkManager.shared.fetchCount { (result) in
+
+                    switch result {
+                    case .success(let models):
+
+                        print("LoadingMore")
+
+                        if models?.results?.count == 0 {
+                            print("==0==")
+                            self.isDonePagination = true
+                        }
+
+                        sleep(2)
+
+                        self.data += models?.results ?? []
+
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                        }
+
+                        self.pagestatus = .NotLoadingMore
+
+                    case .failure(let err):
+                        print(err.localizedDescription)
+                    }
+                }
+
+            default:
+                ()
+                print("NotLoadingMore")
+            }
+        }
         
         return cell
         
