@@ -33,6 +33,12 @@ class UserCell: UICollectionViewCell {
         return iv
     }()
     
+    func config(model: Results) {
+        nameLabel.text = model.email
+        let url = URL(string: model.picture?.medium ?? "")
+        userImage.downloadImage(from: url!)
+    }
+    
     fileprivate func setupViews() {
 
         let stackView = UIStackView(arrangedSubviews: [userImage, nameLabel])
@@ -51,5 +57,10 @@ class UserCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.userImage.image = nil
     }
 }

@@ -13,7 +13,11 @@ enum PageStuts {
     case NotLoadingMore
 }
 
-class HomeViewController: BaseCollectionViewController {
+class HomeViewController: BaseCollectionViewController, NetworkServiceDelegate {
+    
+    func didComplete(result: String) {
+        print("I got \(result) from the server!")
+    }
     
     lazy var refreshControl: UIRefreshControl = {
         let rc = UIRefreshControl()
@@ -45,9 +49,9 @@ class HomeViewController: BaseCollectionViewController {
             }
             
             // 滾動到最下方最新的 Data
-//            self.collectionView.scrollToItem(at: [0, self.data.count - 1],
-//                                             at: .bottom,
-//                                             animated: true)
+            //            self.collectionView.scrollToItem(at: [0, self.data.count - 1],
+            //                                             at: .bottom,
+            //                                             animated: true)
         }
         
     }
@@ -71,11 +75,14 @@ class HomeViewController: BaseCollectionViewController {
     var pagestatus: PageStuts = .NotLoadingMore
     
     var isDonePagination = false
+    var networkDelegate = NetworkService()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupViews()
+        //        networkDelegate.delegate = self
+        //        networkDelegate.fetchDataFromUrl(url: "https://randomuser.me/api/?results=8")
         
         viewModel.fetch()
         
@@ -113,49 +120,45 @@ extension HomeViewController {
         
         let model = data[indexPath.row]
         
-        cell.nameLabel.text = model.email
-        
-        let url = URL(string: model.picture?.medium ?? "")
-        
-        cell.userImage.downloadImage(from: url!)
+        cell.config(model: model)
         
         print("indexPath.row", indexPath.row)
         
         if indexPath.row == data.count - 1 {
             print("fetch more data")
-
+            
             self.pagestatus = .LoadingMore
-
+            
             switch pagestatus {
             case .LoadingMore:
-
+                
                 NetworkManager.shared.fetchCount { (result) in
-
+                    
                     switch result {
                     case .success(let models):
-
+                        
                         print("LoadingMore")
-
+                        
                         if models?.results?.count == 0 {
                             print("==0==")
                             self.isDonePagination = true
                         }
-
+                        
                         sleep(2)
-
+                        
                         self.data += models?.results ?? []
-
+                        
                         DispatchQueue.main.async {
                             self.collectionView.reloadData()
                         }
-
+                        
                         self.pagestatus = .NotLoadingMore
-
+                        
                     case .failure(let err):
                         print(err.localizedDescription)
                     }
                 }
-
+                
             default:
                 ()
                 print("NotLoadingMore")

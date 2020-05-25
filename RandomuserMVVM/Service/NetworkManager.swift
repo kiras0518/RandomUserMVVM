@@ -15,6 +15,30 @@ enum VError: String, Error {
     case invalidPhotoRequest = "The endpoint request to get photos is invalid"
 }
 
+protocol NetworkServiceDelegate: class {
+    func didComplete(result: String)
+}
+
+class NetworkService {
+    
+  weak var delegate: NetworkServiceDelegate?
+    
+    func fetchDataFromUrl(url: String) {
+        
+        NetworkManager.shared.getRequest { (result) in
+            
+            switch result {
+            case .success(let model):
+                self.delegate?.didComplete(result: model?.info?.seed ?? "")
+            case .failure(let err):
+                print(err.localizedDescription)
+            }
+            
+        }
+        
+    }
+}
+
 class NetworkManager {
     
     static let shared = NetworkManager()
