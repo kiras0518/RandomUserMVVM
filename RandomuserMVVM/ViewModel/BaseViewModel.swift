@@ -42,6 +42,18 @@ class BaseViewModel {
             }
         }
     }
+    
+    func fetchCount() {
+        service.fetchCount { (result) in
+            switch result {
+            case .success(let model):
+                sleep(2)
+                self.model! += model?.results ?? []
+            case .failure(let err):
+                print(err.localizedDescription)
+            }
+        }
+    }
 }
 
 extension BaseViewModel: ViewModelable {

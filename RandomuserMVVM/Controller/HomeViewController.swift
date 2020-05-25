@@ -81,17 +81,22 @@ class HomeViewController: BaseCollectionViewController, NetworkServiceDelegate {
         super.viewDidLoad()
         
         setupViews()
-        //        networkDelegate.delegate = self
-        //        networkDelegate.fetchDataFromUrl(url: "https://randomuser.me/api/?results=8")
-        
-        viewModel.fetch()
-        
+        //networkDelegate.delegate = self
+        //networkDelegate.fetchDataFromUrl(url: "https://randomuser.me/api/?results=8")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+     
         viewModel.addObserve { (model) in
             self.update(model ?? [])
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
             }
         }
+        
+        viewModel.fetch()
+             
     }
 }
 
@@ -130,34 +135,13 @@ extension HomeViewController {
             self.pagestatus = .LoadingMore
             
             switch pagestatus {
-            case .LoadingMore:
                 
-                NetworkManager.shared.fetchCount { (result) in
-                    
-                    switch result {
-                    case .success(let models):
-                        
-                        print("LoadingMore")
-                        
-                        if models?.results?.count == 0 {
-                            print("==0==")
-                            self.isDonePagination = true
-                        }
-                        
-                        sleep(2)
-                        
-                        self.data += models?.results ?? []
-                        
-                        DispatchQueue.main.async {
-                            self.collectionView.reloadData()
-                        }
-                        
-                        self.pagestatus = .NotLoadingMore
-                        
-                    case .failure(let err):
-                        print(err.localizedDescription)
-                    }
-                }
+            case .LoadingMore:
+                print("LoadingMore")
+                
+                viewModel.fetchCount()
+
+                self.pagestatus = .NotLoadingMore
                 
             default:
                 ()
